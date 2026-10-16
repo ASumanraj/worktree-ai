@@ -5,17 +5,17 @@
 
 ## Sprint Week 1: Monorepo Foundation & Stage-1 "Trojan Horse" (Zero Binary Install)
 
-- [ ] **TASK-01: Initialize Monorepo & Shared IPC Protocol (`/packages/wt-protocol`)**
+- [x] **TASK-01: Initialize Monorepo & Shared IPC Protocol (`/packages/wt-protocol`)**
   - **Files:** `package.json`, `pnpm-workspace.yaml`, `packages/wt-protocol/src/schema.ts`, `packages/wt-protocol/rust/lib.rs`.
   - **Deliverable:** Define shared TypeScript and Rust structs for `WorktreeContextHeartbeat`, `SpoolJob`, and `TribalMemoryCard`.
   - **Test Gate:** `pnpm --filter wt-protocol test && cargo test --manifest-path packages/wt-protocol/Cargo.toml`.
 
-- [ ] **TASK-02: Cloud Database & $k \ge 5$ Privacy Views (`/services/wt-cloud`)**
+- [x] **TASK-02: Cloud Database & $k \ge 5$ Privacy Views (`/services/wt-cloud`)**
   - **Files:** `services/wt-cloud/app/models/entities.py`, `services/wt-cloud/alembic/versions/001_initial_pgvector.py`.
   - **Deliverable:** Implement `tenants`, `squads`, `tribal_knowledge_nodes` (`pgvector` HNSW), `scope_drift_events`, and `v_squad_flow_metrics_k5`.
   - **Test Gate:** `pytest services/wt-cloud/tests/test_privacy_k5_views.py -v` (Verify queries with $<5$ squad members roll up to parent org).
 
-- [ ] **TASK-03: Stage-1 180-Day GitHub PR & Jira Historical Backfill Worker (`/services/wt-cloud`)**
+- [x] **TASK-03: Stage-1 180-Day GitHub PR & Jira Historical Backfill Worker (`/services/wt-cloud`)**
   - **Files:** `services/wt-cloud/app/workers/backfill.py`, `services/wt-cloud/app/api/oauth_onboarding.py`.
   - **Deliverable:** Async Celery pipeline that ingests 6 months of merged PR review comments, commit blame file paths, and closed Jira bug descriptions, generating `tribal_knowledge_nodes` in $<15$ minutes.
   - **Test Gate:** `pytest services/wt-cloud/tests/test_historical_backfill.py -v`.

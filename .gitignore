@@ -1,0 +1,17 @@
+# Node
+node_modules/
+dist/
+.pnpm-store/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Rust
+target/
+
+# OS
+.DS_Store
+Thumbs.db
