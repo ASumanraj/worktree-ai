@@ -10,7 +10,7 @@ services:
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}
     ports:
       # Host:Container port mapping (Default 8000:8000)
-      - "${WT_CLOUD_PORT:-8000}:8000"
+      - "${WT_CLOUD_PORT:-8005}:8000"
     restart: unless-stopped
 
   wt-web:
@@ -18,14 +18,14 @@ services:
       context: .
       dockerfile: apps/wt-web/Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8005}
     container_name: worktree-web
     environment:
       - PORT=3000
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8005}
     ports:
       # Host:Container port mapping (Default 3003:3000)
-      - "${WT_WEB_PORT:-3003}:3000"
+      - "${WT_WEB_PORT:-3005}:3000"
     depends_on:
       - wt-cloud
     restart: unless-stopped
