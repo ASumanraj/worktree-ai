@@ -19,10 +19,11 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Enable CORS for localhost:3000 (wt-web) and VS Code (wt-ide)
+# Enable CORS for any localhost port (wt-web on 3000, 3003, etc.) and IDE extensions
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -52,5 +53,10 @@ def root():
 
 
 if __name__ == "__main__":
+    import os
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+
+    port = int(os.environ.get("WT_CLOUD_PORT", os.environ.get("PORT", 8000)))
+    host = os.environ.get("WT_CLOUD_HOST", "0.0.0.0")
+    print(f"🚀 WorkTree AI Cloud Core starting on http://{host}:{port}...")
+    uvicorn.run("app.main:app", host=host, port=port, reload=True)

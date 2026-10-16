@@ -4,10 +4,13 @@
   "private": true,
   "description": "WorkTree AI (worktree.ai) — The Edge-Native Engineering Memory, Autonomous Standup & Flow Intelligence Platform",
   "scripts": {
+    "dev:web": "pnpm --filter wt-web dev",
     "build": "pnpm -r run build",
     "test": "pnpm -r run test",
     "lint": "pnpm -r run lint",
-    "typecheck": "pnpm -r run typecheck"
+    "typecheck": "pnpm -r run typecheck",
+    "docker:up": "docker compose up",
+    "docker:down": "docker compose down"
   },
   "devDependencies": {
     "typescript": "^5.6.3"

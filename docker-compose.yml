@@ -1,0 +1,31 @@
+services:
+  wt-cloud:
+    build:
+      context: .
+      dockerfile: services/wt-cloud/Dockerfile
+    container_name: worktree-cloud
+    environment:
+      - WT_CLOUD_PORT=8000
+      - WT_CLOUD_HOST=0.0.0.0
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    ports:
+      # Host:Container port mapping (Default 8000:8000)
+      - "${WT_CLOUD_PORT:-8000}:8000"
+    restart: unless-stopped
+
+  wt-web:
+    build:
+      context: .
+      dockerfile: apps/wt-web/Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    container_name: worktree-web
+    environment:
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      # Host:Container port mapping (Default 3003:3000)
+      - "${WT_WEB_PORT:-3003}:3000"
+    depends_on:
+      - wt-cloud
+    restart: unless-stopped

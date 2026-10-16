@@ -15,12 +15,16 @@ target/
 # Next.js
 .next/
 out/
+*.tsbuildinfo
 
 # Database & Spool
 *.db
 *.sqlite
 *.opus
 .worktree/
+
+# Environment overrides
+.env*.local
 
 # OS
 .DS_Store

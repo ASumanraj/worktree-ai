@@ -4,7 +4,8 @@
   "private": true,
   "description": "WorkTree AI Enterprise Manager & Auto-KT Web Portal",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node dev-server.mjs",
+    "dev:next": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
