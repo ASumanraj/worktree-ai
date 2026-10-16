@@ -33,7 +33,7 @@ const port = process.env.WT_WEB_PORT || process.env.PORT || "3003";
 console.log("\n==================================================");
 console.log(`🚀 WorkTree AI Web Dashboard starting on port ${port}`);
 console.log(`   URL:      http://localhost:${port}`);
-console.log(`   API Base: ${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}`);
+console.log(`   API Base: ${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8005"}`);
 console.log("==================================================\n");
 
 // Check if port flag was already passed in CLI arguments

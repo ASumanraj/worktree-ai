@@ -20,9 +20,9 @@ export function createHeartbeat(params: {
     inferred_ticket_key: params.inferred_ticket_key ?? null,
     active_ast_symbol: params.active_ast_symbol ?? null,
     reflog_delta: {
-      hard_resets_24h: params.reflog_delta?.hard_resets_24h ?? 0,
+      hard_resets_24h: params.reflog_delta?.hard_resets_24h ?? (params.reflog_delta as any)?.resets_last_24h ?? 0,
       stash_drops_24h: params.reflog_delta?.stash_drops_24h ?? 0,
-      commits_pushed_24h: params.reflog_delta?.commits_pushed_24h ?? 0,
+      commits_pushed_24h: params.reflog_delta?.commits_pushed_24h ?? (params.reflog_delta as any)?.commits_last_24h ?? 0,
     },
   };
 }

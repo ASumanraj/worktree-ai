@@ -1,0 +1,22 @@
+{
+  "name": "wt-daemon",
+  "version": "0.1.0",
+  "private": true,
+  "description": "WorkTree AI Native Desktop Edge Daemon (Tier-0 SQLite, FailClosedChannel2Guard, SpoolAndWaitForIdle, VDI IPC Server)",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node --experimental-sqlite --import tsx src/index.ts",
+    "dev": "node --experimental-sqlite --import tsx --watch src/index.ts",
+    "build": "tsc",
+    "test": "node --experimental-sqlite --import tsx --test tests/**/*.test.ts"
+  },
+  "dependencies": {
+    "@worktree/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -25,10 +25,11 @@ def load_env_file(env_path: Path):
                 os.environ[k] = v
 
 
-# 1. Attempt to load root .env or local .env
-root_dir = Path(__file__).resolve().parents[2]
-load_env_file(root_dir / ".env")
-load_env_file(Path(__file__).resolve().parent / ".env")
+# 1. Safely locate and load .env from current directory or any ancestor
+current_file = Path(__file__).resolve()
+load_env_file(current_file.parent / ".env")
+for parent_dir in current_file.parents:
+    load_env_file(parent_dir / ".env")
 
 if __name__ == "__main__":
     import uvicorn

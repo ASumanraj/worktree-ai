@@ -57,7 +57,7 @@ export class MemoryCacheManager {
 export async function fetchRemoteTribalMemory(
   filePath: string,
   symbol?: string,
-  baseUrl = (typeof process !== "undefined" && process.env?.WT_CLOUD_URL) || "http://localhost:8000"
+  baseUrl = (typeof process !== "undefined" && process.env?.WT_CLOUD_URL) || "http://localhost:8005"
 ): Promise<TribalMemoryCard | null> {
   try {
     const cleanPath = filePath.replace(/\\/g, "/");
