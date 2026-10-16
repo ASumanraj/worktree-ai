@@ -1,0 +1,44 @@
+# ==============================================================================
+# WorkTree AI Docker Ignore File
+# ==============================================================================
+# Essential for preventing Windows host node_modules, .next, and .venv from
+# corrupting Linux container file systems during build.
+
+# 1. Dependency Trees & Environments
+node_modules
+**/node_modules
+.venv
+**/.venv
+__pycache__
+**/__pycache__
+*.pyc
+
+# 2. Build Outputs & Caches
+.next
+**/.next
+dist
+**/dist
+build
+out
+**/out
+*.tsbuildinfo
+**/*.tsbuildinfo
+target
+**/target
+.pytest_cache
+**/.pytest_cache
+.turbo
+
+# 3. Local Databases, Audio Spools & State
+*.db
+*.sqlite
+*.sqlite3
+*.opus
+.worktree
+**/.worktree
+
+# 4. Version Control & OS Files
+.git
+.DS_Store
+Thumbs.db
+*.log
