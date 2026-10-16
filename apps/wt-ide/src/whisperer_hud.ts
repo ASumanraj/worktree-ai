@@ -42,7 +42,7 @@ export class MemoryCacheManager {
     const cleanPath = filePath.replace(/\\/g, "/");
     const matches: TribalMemoryCard[] = [];
     for (const [key, card] of this.cache.entries()) {
-      if (key.startsWith(cleanPath) || card.ast_symbol_path.startsWith(cleanPath)) {
+      if (key.includes(cleanPath) || card.ast_symbol_path.includes(cleanPath) || cleanPath.includes(card.ast_symbol_path)) {
         matches.push(card);
       }
     }
@@ -52,4 +52,39 @@ export class MemoryCacheManager {
   public clear(): void {
     this.cache.clear();
   }
+}
+
+export async function fetchRemoteTribalMemory(
+  filePath: string,
+  symbol?: string,
+  baseUrl = "http://localhost:8000"
+): Promise<TribalMemoryCard | null> {
+  try {
+    const cleanPath = filePath.replace(/\\/g, "/");
+    const fileName = cleanPath.split("/").pop() || cleanPath;
+    const url = new URL(`${baseUrl}/api/v1/memory/lookup`);
+    if (symbol) {
+      url.searchParams.set("symbol", symbol);
+    }
+    url.searchParams.set("file", fileName);
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 1200);
+
+    const resp = await fetch(url.toString(), {
+      signal: controller.signal,
+      headers: { Accept: "application/json" },
+    });
+    clearTimeout(timeout);
+
+    if (resp.ok) {
+      const cards = (await resp.json()) as TribalMemoryCard[];
+      if (Array.isArray(cards) && cards.length > 0) {
+        return cards[0];
+      }
+    }
+  } catch {
+    // Graceful offline fallback: wt-cloud not running
+  }
+  return null;
 }

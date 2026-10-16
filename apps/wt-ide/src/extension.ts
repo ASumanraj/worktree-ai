@@ -1,7 +1,11 @@
 import * as vscode from "vscode";
 import { getGitContext } from "./git_watcher.js";
 import { ASTDwellTracker } from "./ast_tracker.js";
-import { MemoryCacheManager, formatTribalMemoryMarkdown } from "./whisperer_hud.js";
+import {
+  MemoryCacheManager,
+  formatTribalMemoryMarkdown,
+  fetchRemoteTribalMemory,
+} from "./whisperer_hud.js";
 import { IPCBridge } from "./ipc_bridge.js";
 import { createHeartbeat } from "@worktree/protocol";
 
@@ -67,20 +71,33 @@ export function activate(context: vscode.ExtensionContext) {
     broadcastHeartbeat(event.normalizedSymbol);
   });
 
-  // Hover Provider for Tribal Memory HUD
+  // Hover Provider for Tribal Memory HUD (Live Cloud Lookup + Local Cache Fallback)
   const hoverProvider = vscode.languages.registerHoverProvider(
     { scheme: "file" },
     {
-      provideHover(document, position) {
+      async provideHover(document, position) {
         const filePath = document.uri.fsPath;
-        const cards = memoryCache.findByPathPrefix(filePath);
-        if (cards.length === 0) {
-          return null;
+        const wordRange = document.getWordRangeAtPosition(position);
+        const currentSymbol = wordRange ? document.getText(wordRange) : undefined;
+
+        // 1. Try Live Cloud Lookup from running wt-cloud on localhost:8000
+        const remoteCard = await fetchRemoteTribalMemory(filePath, currentSymbol);
+        if (remoteCard) {
+          memoryCache.set(remoteCard.ast_symbol_path, remoteCard);
+          const md = new vscode.MarkdownString(formatTribalMemoryMarkdown(remoteCard));
+          md.isTrusted = true;
+          return new vscode.Hover(md);
         }
 
-        const md = new vscode.MarkdownString(formatTribalMemoryMarkdown(cards[0]));
-        md.isTrusted = true;
-        return new vscode.Hover(md);
+        // 2. Offline Fallback: check local memory cache
+        const localCards = memoryCache.findByPathPrefix(filePath);
+        if (localCards.length > 0) {
+          const md = new vscode.MarkdownString(formatTribalMemoryMarkdown(localCards[0]));
+          md.isTrusted = true;
+          return new vscode.Hover(md);
+        }
+
+        return null;
       },
     }
   );

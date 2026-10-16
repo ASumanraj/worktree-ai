@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   formatTribalMemoryMarkdown,
   MemoryCacheManager,
+  fetchRemoteTribalMemory,
 } from "../src/whisperer_hud.js";
 import type { TribalMemoryCard } from "@worktree/protocol";
 
@@ -48,4 +49,10 @@ test("MemoryCacheManager retrieves cards by path prefix", () => {
 
   const notFound = cache.findByPathPrefix("services/auth/AuthService.ts");
   assert.equal(notFound.length, 0);
+});
+
+test("fetchRemoteTribalMemory gracefully returns null when offline", async () => {
+  // Point to a non-existent port to test offline tolerance
+  const result = await fetchRemoteTribalMemory("PaymentReconciler.ts", undefined, "http://127.0.0.1:59999");
+  assert.equal(result, null);
 });

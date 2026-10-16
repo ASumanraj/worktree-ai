@@ -12,6 +12,16 @@ __pycache__/
 # Rust
 target/
 
+# Next.js
+.next/
+out/
+
+# Database & Spool
+*.db
+*.sqlite
+*.opus
+.worktree/
+
 # OS
 .DS_Store
 Thumbs.db
