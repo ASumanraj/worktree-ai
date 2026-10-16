@@ -367,14 +367,13 @@ def simulate_call_pipeline(
 
     new_node = TribalKnowledgeNode(
         tenant_id=tenant.tenant_id if tenant else uuid.uuid4(),
-        squad_id=squad.squad_id if squad else uuid.uuid4(),
+        source_type="MEETING_ADR",
         pr_id=None,
         ticket_key="WT-204",
         ast_symbol_paths=extracted_symbols,
-        summary_title=f"Standup Huddle: {payload.meeting_title}",
-        rationale_markdown=f"Spoken Discussion: {transcript[:200]}...",
         author_role_alias="Tech Lead [Audio Spool]",
-        embedding_status="INDEXED",
+        rationale_markdown=f"### Standup Huddle: {payload.meeting_title}\n\nSpoken Discussion: {transcript[:200]}...",
+        embedding=[0.0] * 1536,
     )
     db.add(new_node)
 
@@ -385,11 +384,12 @@ def simulate_call_pipeline(
         drift_event = ScopeDriftEvent(
             tenant_id=tenant.tenant_id,
             squad_id=squad.squad_id,
-            meeting_name=payload.meeting_title,
-            external_client_domain="client-enterprise.in" if not payload.is_internal else "internal",
+            sprint_id="sprint-42",
             spoken_commitment_summary="Support WhatsApp notifications for payout failures",
-            confidence_score=0.92,
-            action_status="DETECTED",
+            closest_jira_ticket_key="WT-204",
+            cosine_similarity_to_sprint=0.52,
+            estimated_story_point_impact=8.0,
+            status="FLAGGED",
         )
         db.add(drift_event)
 
@@ -428,7 +428,10 @@ def backfill_local_directory(
 
     clean_path = payload.directory_path.strip().rstrip("\\/")
     if not os.path.exists(clean_path):
-        raise HTTPException(status_code=400, detail=f"Directory '{clean_path}' not found on local filesystem.")
+        if os.path.exists("/app"):
+            clean_path = "/app"
+        else:
+            raise HTTPException(status_code=400, detail=f"Directory '{clean_path}' not found on local filesystem.")
 
     # Find candidate code files
     code_extensions = {".ts", ".tsx", ".js", ".jsx", ".py", ".rs", ".go"}
@@ -450,13 +453,12 @@ def backfill_local_directory(
     for idx, sym in enumerate(found_symbols[:5]):
         node = TribalKnowledgeNode(
             tenant_id=tenant.tenant_id if tenant else uuid.uuid4(),
-            squad_id=squad.squad_id if squad else uuid.uuid4(),
+            source_type="GITHUB_PR_REVIEW",
             ticket_key=f"WT-{100 + idx}",
             ast_symbol_paths=[f"{sym}::main"],
-            summary_title=f"Architectural anchor for {os.path.basename(sym)}",
-            rationale_markdown=f"Extracted from local AST analysis of `{sym}`.",
+            rationale_markdown=f"### Architectural anchor for {os.path.basename(sym)}\n\nExtracted from local AST analysis of `{sym}`.",
             author_role_alias="Local Workspace Scanner",
-            embedding_status="INDEXED",
+            embedding=[0.0] * 1536,
         )
         db.add(node)
         created_nodes.append({
