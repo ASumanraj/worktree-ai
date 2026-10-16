@@ -1,0 +1,25 @@
+{
+  "name": "wt-ide",
+  "displayName": "WorkTree AI - Ambient Context & Flow Intelligence",
+  "description": "IDE companion for WorkTree AI: Tribal memory whisperer and git context sync",
+  "version": "0.1.0",
+  "publisher": "worktree-ai",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Programming Languages", "Other"],
+  "main": "./dist/extension.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsx --test tests/**/*.test.ts"
+  },
+  "dependencies": {
+    "@worktree/protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2"
+  }
+}

@@ -20,7 +20,7 @@
   - **Deliverable:** Async Celery pipeline that ingests 6 months of merged PR review comments, commit blame file paths, and closed Jira bug descriptions, generating `tribal_knowledge_nodes` in $<15$ minutes.
   - **Test Gate:** `pytest services/wt-cloud/tests/test_historical_backfill.py -v`.
 
-- [ ] **TASK-04: VS Code Extension — Git Watcher, AST Tracker & Ambient Whisperer HUD (`/apps/wt-ide`)**
+- [x] **TASK-04: VS Code Extension — Git Watcher, AST Tracker & Ambient Whisperer HUD (`/apps/wt-ide`)**
   - **Files:** `apps/wt-ide/src/git_watcher.ts`, `apps/wt-ide/src/ast_tracker.ts`, `apps/wt-ide/src/whisperer_hud.ts`.
   - **Deliverable:** Watch `.git/logs/HEAD` (local and remote SSH/WSL2), extract active `tree-sitter` function/class symbols on 4-second cursor dwell, and render the non-intrusive Tribal Memory hover card.
   - **Test Gate:** `pnpm --filter wt-ide test`.
